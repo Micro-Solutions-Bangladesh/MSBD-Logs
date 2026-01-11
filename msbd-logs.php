@@ -4,7 +4,7 @@
  * Plugin Name: MSBD Logs
  * Plugin URI: https://microsolutionsbd.com/wp-plugin-msbd-logs/2026/
  * Description: Simple logging helper for plugin & theme developers with an admin UI for reviewing logs stored in wp-content/uploads/logs/.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Micro Solutions BD
  * Author URI: https://microsolutionsbd.com/
  * Text Domain: msbd-logs
@@ -25,7 +25,7 @@ if (! defined('ABSPATH')) {
 /**
  * Define constants.
  */
-define('MSBD_LOGS_VERSION', '1.0.0');
+define('MSBD_LOGS_VERSION', '1.0.1');
 define('MSBD_LOGS_ENABLE_DEBUG_OPTION', 'msbd_logs_enable_debug');
 
 

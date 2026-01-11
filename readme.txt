@@ -4,7 +4,7 @@ Tags: logs, logging, debug, debugging, error log
 Requires at least: 5.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,7 +118,10 @@ Somehow we overlooked your question, We apologize for this. Please visit contact
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.1 =
+* Refactor nonce handling to enhance security.
+
+= 1.0.0 =
 * Initial release
 * Logging helper function
 * Admin interface for viewing and managing logs

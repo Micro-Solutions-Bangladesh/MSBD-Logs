@@ -180,6 +180,7 @@ function msbd_logs_admin_page()
     }
 
     $logs_dir = msbd_logs_get_logs_dir();
+
     if (!$logs_dir) {
         echo '<div class="notice notice-error"><p>' .
             esc_html__('Uploads/logs directory is not accessible.', 'msbd-logs') .
@@ -187,9 +188,17 @@ function msbd_logs_admin_page()
         return;
     }
 
-    $search = isset($_GET['s'])
-        ? sanitize_text_field(wp_unslash($_GET['s']))
-        : '';
+    $search = '';
+
+    if (
+        isset($_GET['s']) &&
+        wp_verify_nonce(
+            sanitize_text_field(wp_unslash($_GET['_msbd_logs_search_nonce'])),
+            'msbd_logs_search'
+        )
+    ) {
+        $search = sanitize_text_field(wp_unslash($_GET['s']));
+    }
 
     $files = msbd_logs_get_files_list($logs_dir, $search);
 
@@ -228,6 +237,7 @@ function msbd_logs_admin_page()
      * ------------------------- */
     echo '<form method="get" style="margin-bottom:16px;">';
     echo '<input type="hidden" name="page" value="msbd-logs" />';
+    wp_nonce_field('msbd_logs_search', '_msbd_logs_search_nonce');
     echo '<input type="search" name="s" value="' . esc_attr($search) . '" placeholder="' .
         esc_attr__('Search filenames', 'msbd-logs') . '" />';
     echo ' <input type="submit" class="button" value="' .
@@ -272,6 +282,13 @@ function msbd_logs_admin_page()
             'msbd_logs_view' => rawurlencode($basename),
         ), admin_url('admin.php'));
 
+        // Add nonce
+        $view_url = wp_nonce_url(
+            $view_url,
+            'msbd_logs_view_action',
+            'msbd_logs_nonce'
+        );
+
         echo '<a class="button button-small" href="' . esc_url($view_url) . '">' .
             esc_html__('View', 'msbd-logs') . '</a> ';
 
@@ -293,7 +310,21 @@ function msbd_logs_admin_page()
     /* -------------------------
      * View file contents
      * ------------------------- */
-    if (isset($_GET['msbd_logs_view'])) {
+    if (isset($_GET['msbd_logs_view'], $_GET['msbd_logs_nonce'])) {
+        // Validate nonce
+        if (
+            ! wp_verify_nonce(
+                sanitize_text_field(wp_unslash($_GET['msbd_logs_nonce'])),
+                'msbd_logs_view_action'
+            )
+        ) {
+            echo '<div class="notice notice-error"><p>' .
+                esc_html__('Invalid request (Security check failed).', 'msbd-logs') .
+                '</p></div>';
+
+            return;
+        }
+
         $file = sanitize_file_name(wp_unslash($_GET['msbd_logs_view']));
         $filepath = realpath(trailingslashit($logs_dir) . $file);
         $logs_dir_real = realpath($logs_dir);

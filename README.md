@@ -90,17 +90,6 @@ Yes. Debug logging can be disabled at any time.
 
 ---
 
-## 📝 Changelog
-
-### 1.0.0
-- Initial release
-- Logging helper
-- Admin UI
-- Debug toggle
-- Secure file handling
-
----
-
 ## 📄 License
 
 GPL v2 or later  
